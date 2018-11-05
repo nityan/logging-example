@@ -16,17 +16,25 @@
  * User: nitya
  * Date: 2018-11-5
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using LoggingExample.Services;
 
-namespace LoggingExample.Services
+namespace LoggingExample.Extensions
 {
+	/// <summary>
+	/// Contains extension methods for the <see cref="IEmailSender"/> interface.
+	/// </summary>
 	public static class EmailSenderExtensions
 	{
+		/// <summary>
+		/// Sends the email confirmation asynchronously.
+		/// </summary>
+		/// <param name="emailSender">The email sender.</param>
+		/// <param name="email">The email.</param>
+		/// <param name="link">The link.</param>
+		/// <returns>Task.</returns>
 		public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string email, string link)
 		{
 			return emailSender.SendEmailAsync(email, "Confirm your email",

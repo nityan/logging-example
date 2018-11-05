@@ -23,8 +23,18 @@ using System.Threading.Tasks;
 
 namespace LoggingExample.Services
 {
+	/// <summary>
+	/// Represents an email sender service.
+	/// </summary>
 	public interface IEmailSender
 	{
+		/// <summary>
+		/// Sends the email asynchronously.
+		/// </summary>
+		/// <param name="email">The email.</param>
+		/// <param name="subject">The subject.</param>
+		/// <param name="message">The message.</param>
+		/// <returns>Returns a completed task representing the email send event.</returns>
 		Task SendEmailAsync(string email, string subject, string message);
 	}
 }

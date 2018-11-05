@@ -23,10 +23,19 @@ using System.Threading.Tasks;
 
 namespace LoggingExample.Services
 {
-	// This class is used by the application to send email for account confirmation and password reset.
-	// For more details see https://go.microsoft.com/fwlink/?LinkID=532713
+	/// <summary>
+	/// Represents an email sender service.
+	/// </summary>
+	/// <seealso cref="LoggingExample.Services.IEmailSender" />
 	public class EmailSender : IEmailSender
 	{
+		/// <summary>
+		/// Sends the email asynchronously.
+		/// </summary>
+		/// <param name="email">The email.</param>
+		/// <param name="subject">The subject.</param>
+		/// <param name="message">The message.</param>
+		/// <returns>Returns a completed task representing the email send event.</returns>
 		public Task SendEmailAsync(string email, string subject, string message)
 		{
 			return Task.CompletedTask;
