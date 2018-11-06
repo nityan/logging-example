@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LoggingExample
 {
@@ -91,6 +92,14 @@ namespace LoggingExample
 			services.AddIdentity<ApplicationUser, IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
+
+			services.AddLogging(c =>
+			{
+				c.AddConsole();
+				c.AddDebug();
+				c.AddEventSourceLogger();
+				c.AddTraceSource("LoggingExample");
+			});
 
 			services.AddTransient<IEmailSender, EmailSender>();
 

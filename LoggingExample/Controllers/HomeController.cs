@@ -20,13 +20,26 @@
 using LoggingExample.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace LoggingExample.Controllers
 {
 	public class HomeController : Controller
 	{
+		/// <summary>
+		/// The logger.
+		/// </summary>
+		private readonly ILogger<HomeController> logger;
+
+		public HomeController(ILogger<HomeController> logger)
+		{
+			this.logger = logger;
+		}
+
 		public IActionResult About()
 		{
+			this.logger.LogInformation("You have accessed the home controller about page");
+
 			ViewData["Message"] = "Your application description page.";
 
 			return View();
@@ -34,6 +47,8 @@ namespace LoggingExample.Controllers
 
 		public IActionResult Contact()
 		{
+			this.logger.LogInformation("You have accessed the home controller contact page");
+
 			ViewData["Message"] = "Your contact page.";
 
 			return View();
@@ -46,6 +61,8 @@ namespace LoggingExample.Controllers
 
 		public IActionResult Index()
 		{
+			this.logger.LogInformation("You have accessed the home controller index page");
+
 			return View();
 		}
 	}
