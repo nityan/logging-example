@@ -23,22 +23,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using LoggingExample.Models;
+using LoggingExample.Models.DbModels;
 
 namespace LoggingExample.Data
 {
+	/// <summary>
+	/// Represents an application database context.
+	/// </summary>
+	/// <seealso cref="Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext{LoggingExample.Models.ApplicationUser}" />
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
+		/// </summary>
+		/// <param name="options">The options.</param>
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options)
 		{
 		}
 
-		protected override void OnModelCreating(ModelBuilder builder)
-		{
-			base.OnModelCreating(builder);
-			// Customize the ASP.NET Identity model and override the defaults if needed.
-			// For example, you can rename the ASP.NET Identity table names and more.
-			// Add your customizations after calling base.OnModelCreating(builder);
-		}
+		/// <summary>
+		/// Gets or sets the logs.
+		/// </summary>
+		/// <value>The logs.</value>
+		public DbSet<Log> Logs { get; set; }
 	}
 }

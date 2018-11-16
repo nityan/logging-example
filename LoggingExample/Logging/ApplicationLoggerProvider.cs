@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace WebApplication1.Logging
+namespace LoggingExample.Logging
 {
 	/// <summary>
 	/// Represents an application logging provider.

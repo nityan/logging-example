@@ -87,7 +87,7 @@ namespace LoggingExample
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+				options.UseSqlServer(Configuration.GetConnectionString("LoggingConnection")));
 
 			services.AddIdentity<ApplicationUser, IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>()
@@ -102,6 +102,7 @@ namespace LoggingExample
 			});
 
 			services.AddTransient<IEmailSender, EmailSender>();
+			services.AddTransient<ILoggingService, LoggingService>();
 
 			services.AddMvc();
 		}

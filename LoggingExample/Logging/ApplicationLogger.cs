@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace WebApplication1.Logging
+namespace LoggingExample.Logging
 {
 	/// <summary>
 	/// Represents an application logger.
@@ -44,7 +40,7 @@ namespace WebApplication1.Logging
 		/// <param name="formatter">Function to create a <c>string</c> message of the <paramref name="state" /> and <paramref name="exception" />.</param>
 		public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
 		{
-			if (!IsEnabled(logLevel))
+			if (!this.IsEnabled(logLevel))
 			{
 				return;
 			}
@@ -54,7 +50,7 @@ namespace WebApplication1.Logging
 				throw new ArgumentNullException(nameof(formatter), "Value cannot be null");
 			}
 
-			var message = formatter?.Invoke(state, exception);
+			var message = formatter.Invoke(state, exception);
 
 			var builder = new StringBuilder();
 

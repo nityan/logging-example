@@ -13,6 +13,17 @@ namespace LoggingExample.Services
 	public interface ILoggingService
 	{
 		/// <summary>
+		/// Creates a log entry.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="stackTrace">The stack trace.</param>
+		/// <param name="requestPath">The request path.</param>
+		/// <param name="activityId">The activity identifier.</param>
+		/// <returns>Returns the created log entry.</returns>
+		Task<Log> CreateAsync(string type, string message, string stackTrace, string requestPath, Guid? activityId);
+
+		/// <summary>
 		/// Retrieves a log for a given id.
 		/// </summary>
 		/// <param name="id">The identifier.</param>

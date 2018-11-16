@@ -21,7 +21,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace WebApplication1.Logging
+namespace LoggingExample.Logging
 {
 	/// <summary>
 	/// Represents a roll over log trace listener.
