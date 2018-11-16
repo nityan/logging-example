@@ -17,6 +17,7 @@
  * Date: 2018-11-5
  */
 
+using System;
 using LoggingExample.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -63,13 +64,33 @@ namespace LoggingExample.Controllers
 		[ActionName("Contact")]
 		public async Task<IActionResult> ContactAsync()
 		{
-			await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller contact page", null, null, null);
+			try
+			{
+				await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller contact page", null, null, null);
+			}
+			catch (Exception e)
+			{
+				// write the exception to the console log
+				Console.WriteLine($"Unexpected error: {e}");
+
+				// write the exception to the debug log
+				Debug.WriteLine($"Unexpected error: {e}");
+
+				// write the exception to the trace log
+				Trace.TraceError($"Unexpected error: {e}");
+
+				// something went wrong when trying to write to the log
+				// so we want to return our home controller error page
+				// redirect the user to the error action on the home controller, to display information about the error
+				return this.RedirectToAction("Error");
+			}
 
 			ViewData["Message"] = "Your contact page.";
 
 			return this.View("Contact");
 		}
 
+		// handlers errors specifically for the "HomeController"
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -78,7 +99,27 @@ namespace LoggingExample.Controllers
 		[ActionName("Index")]
 		public async Task<IActionResult> IndexAsync()
 		{
-			await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller index page", null, null, null);
+			try
+			{
+				// write the the log
+				// this is an informational type log
+				await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller index page", null, null, null);
+			}
+			catch (Exception e)
+			{
+				// instead of redirecting the user to the error view, we want to keep them
+				// on the index page
+
+				// write the exception to the console log
+				Console.WriteLine($"Unexpected error: {e}");
+
+				// write the exception to the debug log
+				Debug.WriteLine($"Unexpected error: {e}");
+
+				// write the exception to the trace log
+				Trace.TraceError($"Unexpected error: {e}");
+			}
+			
 
 			return this.View("Index");
 		}

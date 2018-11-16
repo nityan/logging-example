@@ -68,20 +68,70 @@ namespace LoggingExample
 		{
 			var logger = this.loggerFactory.CreateLogger<Startup>();
 
-			//if (env.IsDevelopment())
+			if (env.IsDevelopment())
+			{
+				app.UseBrowserLink();
+
+				// using the developer exception page
+				// should only be used during development
+				// as using this in staging or production, would reveal sensitive information to the user
+				//app.UseDeveloperExceptionPage();
+				//app.UseDatabaseErrorPage();
+			}
+			// use our staging/production error handler, when we are not in development mode
+			else if (env.IsStaging() || env.IsProduction())
+			{
+				// force all the unhandled errors to show the not found page
+				// so that we mask as much as possible from the user as to what happened
+				// however, our not found action will log everything that happened for later use
+				app.UseExceptionHandler("/Error/Index");
+			}
+
+			// handle exceptions with given options
+			// this would be used for customizing the exception handling
+			//app.UseExceptionHandler(new ExceptionHandlerOptions
 			//{
-			//	app.UseBrowserLink();
-			//	app.UseDeveloperExceptionPage();
-			//	app.UseDatabaseErrorPage();
-			//}
+			//	ExceptionHandlingPath = "/Error/Index"
+			//});
 
+			// indicates to the asp net core pipeline, that errors should be handled
+			// using a status code handler, with potential redirects
 
-			// force all the unhandled errors to show the not found page
-			// so that we mask as much as possible from the user as to what happened
-			// however, our not found action will log everything that happened for later use
-			//app.UseExceptionHandler("/Error");
-
+			// the parameter ("/Error/StatusError?statusCode={0}")
+			// links to a controller called Error
+			// with an action called StatusError
+			// with a parameter of status code (int)
 			app.UseStatusCodePagesWithRedirects("/Error/StatusError?statusCode={0}");
+
+			// 100's
+			// 100 continue
+			// 101 - accept
+			// 200's
+			// any code that means success
+			// 200 - success
+			// 201 - created
+			// 204 - no content
+			// 300's
+			// redirects
+			// 302 - redirect
+			// 304 - redirect permanently
+			// 307 - redirect temporary				
+			// 400's
+			// client application errors
+			// 400 - bad request
+			// 401 - authorization (you are not authorized, you must supply valid credentials)
+			// 403 - forbidden (you are authorized, but do not have permission to perform the action)
+			// 404 - NOT FOUND
+			// 405 - method not allowed (HTTP methods, such as GET, POST, PUT, DELETE)
+			// [HttpGet]
+			// [HttpPost]
+
+			// 500's
+			// server errors
+			// 500 - internal server error
+			// 501 - not implemented
+			// 502 - bad gateway (networking error)
+			// 503 - service unavailable
 
 			//app.UseStatusCodePagesWithReExecute("/Error/StatusError", "?statusCode={0}");
 
@@ -147,11 +197,19 @@ namespace LoggingExample
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
+			// add logging services
 			services.AddLogging(c =>
 			{
+				// add the console log
 				c.AddConsole();
+
+				// add debug logs
 				c.AddDebug();
+
+				// add an event source log
 				c.AddEventSourceLogger();
+
+				// add a trace source log, with a given name
 				c.AddTraceSource("LoggingExample");
 			});
 
