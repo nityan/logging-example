@@ -1,0 +1,37 @@
+﻿@model IEnumerable<LoggingExample.Models.LogModels.LogViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Message)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayTextFor(model => item.CreationTime)
+            </td>
+            <td>
+                @Html.TextAreaFor(model => item.Message, new { @class = "form-control", cols = "25", rows = "10", @readonly = "readonly" })
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

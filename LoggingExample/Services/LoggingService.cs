@@ -37,7 +37,7 @@ namespace LoggingExample.Services
 		/// <param name="stackTrace">The stack trace.</param>
 		/// <param name="requestPath">The request path.</param>
 		/// <param name="activityId">The activity identifier.</param>
-		public async Task<Log> CreateAsync(string type, string message, string stackTrace, string requestPath, Guid? activityId)
+		public async Task<Log> CreateAsync(LogType type, string message, string stackTrace, string requestPath, string activityId)
 		{
 			var log = new Log
 			{

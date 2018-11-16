@@ -17,6 +17,8 @@
  * Date: 2018-11-5
  */
 
+using System;
+using System.Threading.Tasks;
 using LoggingExample.Data;
 using LoggingExample.Models;
 using LoggingExample.Services;
@@ -36,12 +38,19 @@ namespace LoggingExample
 	public class Startup
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Startup"/> class.
+		/// The logger factory.
+		/// </summary>
+		private readonly ILoggerFactory loggerFactory;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Startup" /> class.
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
-		public Startup(IConfiguration configuration)
+		/// <param name="loggerFactory">The logger factory.</param>
+		public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
 		{
-			Configuration = configuration;
+			this.Configuration = configuration;
+			this.loggerFactory = loggerFactory;
 		}
 
 		/// <summary>
@@ -57,18 +66,63 @@ namespace LoggingExample
 		/// <param name="env">The env.</param>
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			if (env.IsDevelopment())
-			{
-				app.UseBrowserLink();
-				app.UseDeveloperExceptionPage();
-				app.UseDatabaseErrorPage();
-			}
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-			}
+			var logger = this.loggerFactory.CreateLogger<Startup>();
 
-			app.UseStaticFiles();
+			//if (env.IsDevelopment())
+			//{
+			//	app.UseBrowserLink();
+			//	app.UseDeveloperExceptionPage();
+			//	app.UseDatabaseErrorPage();
+			//}
+
+
+			// force all the unhandled errors to show the not found page
+			// so that we mask as much as possible from the user as to what happened
+			// however, our not found action will log everything that happened for later use
+			//app.UseExceptionHandler("/Error");
+
+			app.UseStatusCodePagesWithRedirects("/Error/StatusError?statusCode={0}");
+
+			//app.UseStatusCodePagesWithReExecute("/Error/StatusError", "?statusCode={0}");
+
+			app.Use(async (context, next) =>
+			{
+				try
+				{
+					// call next
+					await next.Invoke();
+				}
+				catch (Exception e)
+				{
+					logger.LogError(env.IsDevelopment() ? $"Unexpected error: {e}" : $"Unexpected error: {e.Message}");
+				}
+			});
+
+			app.Use(async (context, next) =>
+			{
+				context.Response.OnStarting((state) =>
+				{
+					context.Response.Headers["X-Frame-Options"] = "deny";
+					context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+					context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+					context.Response.Headers["Cache-Control"] = "no-cache";
+
+					return Task.CompletedTask;
+				}, context);
+
+				await next.Invoke();
+			});
+
+			app.UseStaticFiles(new StaticFileOptions
+			{
+				OnPrepareResponse = context =>
+				{
+					context.Context.Response.Headers["X-Frame-Options"] = "deny";
+					context.Context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+					context.Context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+					context.Context.Response.Headers["Cache-Control"] = "no-cache";
+				}
+			});
 
 			app.UseAuthentication();
 

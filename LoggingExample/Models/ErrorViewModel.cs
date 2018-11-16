@@ -19,10 +19,42 @@
 
 namespace LoggingExample.Models
 {
+	/// <summary>
+	/// Represents an error view model.
+	/// </summary>
 	public class ErrorViewModel
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ErrorViewModel"/> class.
+		/// </summary>
+		public ErrorViewModel()
+		{
+			
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ErrorViewModel"/> class.
+		/// </summary>
+		/// <param name="requestId">The request identifier.</param>
+		/// <param name="description">The description.</param>
+		public ErrorViewModel(string requestId, string description)
+		{
+			this.RequestId = requestId;
+			this.Description = description;
+		}
+
+		/// <summary>
+		/// Gets or sets the request identifier.
+		/// </summary>
+		/// <value>The request identifier.</value>
 		public string RequestId { get; set; }
 
 		public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+		/// <summary>
+		/// Gets or sets the description.
+		/// </summary>
+		/// <value>The description.</value>
+		public string Description { get; set; }
 	}
 }

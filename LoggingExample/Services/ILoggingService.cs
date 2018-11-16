@@ -21,7 +21,7 @@ namespace LoggingExample.Services
 		/// <param name="requestPath">The request path.</param>
 		/// <param name="activityId">The activity identifier.</param>
 		/// <returns>Returns the created log entry.</returns>
-		Task<Log> CreateAsync(string type, string message, string stackTrace, string requestPath, Guid? activityId);
+		Task<Log> CreateAsync(LogType type, string message, string stackTrace, string requestPath, string activityId);
 
 		/// <summary>
 		/// Retrieves a log for a given id.

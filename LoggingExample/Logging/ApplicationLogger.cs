@@ -10,7 +10,14 @@ namespace LoggingExample.Logging
 	/// <seealso cref="Microsoft.Extensions.Logging.ILogger" />
 	public class ApplicationLogger : ILogger, IDisposable
 	{
+		/// <summary>
+		/// The category name.
+		/// </summary>
 		private readonly string categoryName;
+
+		/// <summary>
+		/// The trace listener.
+		/// </summary>
 		private static RollOverTextWriterTraceListener traceListener;
 
 		/// <summary>
@@ -23,7 +30,7 @@ namespace LoggingExample.Logging
 
 			if (traceListener == null)
 			{
-				traceListener = new RollOverTextWriterTraceListener("webapp1.log");
+				traceListener = new RollOverTextWriterTraceListener("logging_example.log");
 				traceListener.Write("logger created");
 				traceListener.Flush();
 			}
@@ -90,7 +97,7 @@ namespace LoggingExample.Logging
 		{
 			if (traceListener == null)
 			{
-				traceListener = new RollOverTextWriterTraceListener("webapp1.log");
+				traceListener = new RollOverTextWriterTraceListener("logging_example.log");
 			}
 
 			return traceListener;

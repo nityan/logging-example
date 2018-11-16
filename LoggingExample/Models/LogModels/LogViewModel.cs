@@ -1,45 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using LoggingExample.Models.DbModels;
 
-namespace LoggingExample.Models.DbModels
+namespace LoggingExample.Models.LogModels
 {
 	/// <summary>
-	/// Represents a log.	
+	/// Represents a log view model.
 	/// </summary>
-	public class Log
+	public class LogViewModel
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Log"/> class.
+		/// Initializes a new instance of the <see cref="LogViewModel"/> class.
 		/// </summary>
-		public Log() : this(Guid.NewGuid(), DateTime.Now)
+		public LogViewModel()
 		{
 			
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Log"/> class.
+		/// Initializes a new instance of the <see cref="LogViewModel"/> class.
 		/// </summary>
-		/// <param name="id">The identifier.</param>
-		/// <param name="creationTime">The creation time.</param>
-		public Log(Guid id, DateTime creationTime)
+		/// <param name="log">The log.</param>
+		public LogViewModel(Log log)
 		{
-			this.Id = id;
-			this.CreationTime = creationTime;
+			this.Id = log.Id;
+			this.CreationTime = log.CreationTime;
+			this.Message = log.Message;
+			this.RequestPath = log.RequestPath;
+			this.StackTrace = log.StackTrace;
+			this.ActivityId = log.ActivityId;
 		}
-
-		/// <summary>
-		/// Gets or sets the creation time.
-		/// </summary>
-		/// <value>The creation time.</value>
-		[Required]
-		public DateTime CreationTime { get; set; }
 
 		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
-		[Key]
 		public Guid Id { get; set; }
+
+		/// <summary>
+		/// Gets or sets the creation time.
+		/// </summary>
+		/// <value>The creation time.</value>
+		[Display(Name = "CreationTime")]
+		public DateTime CreationTime { get; set; }
 
 		/// <summary>
 		/// Gets or sets the activity identifier.
@@ -69,7 +75,12 @@ namespace LoggingExample.Models.DbModels
 		/// Gets or sets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		[Required]
 		public LogType Type { get; set; }
+
+		/// <summary>
+		/// Gets the log type display.
+		/// </summary>
+		/// <value>The log type display.</value>
+		public string LogTypeDisplay => Enum.GetName(typeof(LogType), this.Type);
 	}
 }

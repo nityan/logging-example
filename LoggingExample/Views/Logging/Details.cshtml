@@ -1,0 +1,53 @@
+﻿@model LoggingExample.Models.LogModels.LogViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Log Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreationTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LogTypeDisplay)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LogTypeDisplay)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActivityId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ActivityId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+        <dd>
+            @Html.TextAreaFor(model => model.Message, new { @class = "form-control", cols = "20", rows = 5, @readonly = "readonly" })
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StackTrace)
+        </dt>
+        <dd>
+            @Html.TextAreaFor(model => model.StackTrace, new { @class = "form-control", cols = "20", rows = 5, @readonly = "readonly" })
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RequestPath)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RequestPath)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

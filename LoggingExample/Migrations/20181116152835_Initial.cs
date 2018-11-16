@@ -53,12 +53,12 @@ namespace LoggingExample.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    ActivityId = table.Column<Guid>(nullable: true),
+                    ActivityId = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     Message = table.Column<string>(nullable: true),
                     RequestPath = table.Column<string>(nullable: true),
                     StackTrace = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: false)
+                    Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

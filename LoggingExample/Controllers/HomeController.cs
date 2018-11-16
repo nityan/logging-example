@@ -20,38 +20,54 @@
 using LoggingExample.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using LoggingExample.Models.DbModels;
+using LoggingExample.Services;
 
 namespace LoggingExample.Controllers
 {
+	/// <summary>
+	/// Represents a home controller.
+	/// </summary>
+	/// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
 	public class HomeController : Controller
 	{
 		/// <summary>
-		/// The logger.
+		/// The logging service.
 		/// </summary>
-		private readonly ILogger<HomeController> logger;
+		private readonly ILoggingService loggingService;
 
-		public HomeController(ILogger<HomeController> logger)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HomeController"/> class.
+		/// </summary>
+		/// <param name="loggingService">The logging service.</param>
+		public HomeController(ILoggingService loggingService)
 		{
-			this.logger = logger;
+			this.loggingService = loggingService;
 		}
 
-		public IActionResult About()
+		/// <summary>
+		/// Displays the about page.
+		/// </summary>
+		/// <returns>Returns an action result.</returns>
+		[ActionName("About")]
+		public async Task<IActionResult> AboutAsync()
 		{
-			this.logger.LogInformation("You have accessed the home controller about page");
+			await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller about page", null, null, null);
 
 			ViewData["Message"] = "Your application description page.";
 
-			return View();
+			return this.View("About");
 		}
 
-		public IActionResult Contact()
+		[ActionName("Contact")]
+		public async Task<IActionResult> ContactAsync()
 		{
-			this.logger.LogInformation("You have accessed the home controller contact page");
+			await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller contact page", null, null, null);
 
 			ViewData["Message"] = "Your contact page.";
 
-			return View();
+			return this.View("Contact");
 		}
 
 		public IActionResult Error()
@@ -59,11 +75,12 @@ namespace LoggingExample.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-		public IActionResult Index()
+		[ActionName("Index")]
+		public async Task<IActionResult> IndexAsync()
 		{
-			this.logger.LogInformation("You have accessed the home controller index page");
+			await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller index page", null, null, null);
 
-			return View();
+			return this.View("Index");
 		}
 	}
 }

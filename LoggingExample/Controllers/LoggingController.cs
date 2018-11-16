@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LoggingExample.Models.LogModels;
 using LoggingExample.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,10 +31,45 @@ namespace LoggingExample.Controllers
 		/// <summary>
 		/// Displays the index view.
 		/// </summary>
-		/// <returns>IActionResult.</returns>
-		public IActionResult Index()
-        {
-            return View();
-        }
-    }
+		/// <returns>Returns an action result.</returns>
+		[ActionName("Index")]
+		public async Task<IActionResult> IndexAsync()
+		{
+			var logs = new List<LogViewModel>();
+
+			var results = await this.loggingService.GetLogsAsync(c => true, null, 0);
+
+			logs.AddRange(results.Select(c => new LogViewModel(c)).OrderByDescending(c => c.CreationTime));
+
+			return View("Index", logs);
+		}
+
+		/// <summary>
+		/// Displays the details view.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>Returns an action result.</returns>
+		[ActionName("Details")]
+		public async Task<IActionResult> DetailsAsync(Guid id)
+		{
+			LogViewModel model = null;
+
+			try
+			{
+				var log = await this.loggingService.GetLogAsync(id);
+
+				model = new LogViewModel(log);
+			}
+			catch (KeyNotFoundException)
+			{
+				return RedirectToAction("Index");
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+
+			return this.View("Details", model);
+		}
+	}
 }
