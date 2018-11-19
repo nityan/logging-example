@@ -13,7 +13,7 @@ namespace LoggingExample.Models.DbModels
 		/// </summary>
 		public Log() : this(Guid.NewGuid(), DateTime.Now)
 		{
-			
+			this.Type = LogType.Information;
 		}
 
 		/// <summary>

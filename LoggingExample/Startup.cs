@@ -211,6 +211,9 @@ namespace LoggingExample
 
 				// add a trace source log, with a given name
 				c.AddTraceSource("LoggingExample");
+
+				// add logging configuration
+				c.AddConfiguration(this.Configuration.GetSection("Logging"));
 			});
 
 			services.AddTransient<IEmailSender, EmailSender>();

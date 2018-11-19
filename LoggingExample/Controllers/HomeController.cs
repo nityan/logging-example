@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using LoggingExample.Models.DbModels;
 using LoggingExample.Services;
+using Microsoft.Extensions.Logging;
 
 namespace LoggingExample.Controllers
 {
@@ -51,22 +52,24 @@ namespace LoggingExample.Controllers
 		/// Displays the about page.
 		/// </summary>
 		/// <returns>Returns an action result.</returns>
-		[ActionName("About")]
-		public async Task<IActionResult> AboutAsync()
+		public IActionResult About()
 		{
-			await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller about page", null, null, null);
+			this.loggingService.LogInformation("You have accessed the home controller about page");
 
 			ViewData["Message"] = "Your application description page.";
 
-			return this.View("About");
+			return this.View();
 		}
 
-		[ActionName("Contact")]
-		public async Task<IActionResult> ContactAsync()
+		/// <summary>
+		/// Displays the contact page.
+		/// </summary>
+		/// <returns>Returns an action result.</returns>
+		public IActionResult Contact()
 		{
 			try
 			{
-				await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller contact page", null, null, null);
+				this.loggingService.LogInformation("You have accessed the home controller contact page");
 			}
 			catch (Exception e)
 			{
@@ -87,7 +90,7 @@ namespace LoggingExample.Controllers
 
 			ViewData["Message"] = "Your contact page.";
 
-			return this.View("Contact");
+			return this.View();
 		}
 
 		// handlers errors specifically for the "HomeController"
@@ -96,14 +99,17 @@ namespace LoggingExample.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-		[ActionName("Index")]
-		public async Task<IActionResult> IndexAsync()
+		/// <summary>
+		/// Displays the index page.
+		/// </summary>
+		/// <returns>Returns an action result.</returns>
+		public IActionResult Index()
 		{
 			try
 			{
 				// write the the log
 				// this is an informational type log
-				await this.loggingService.CreateAsync(LogType.Information, "You have accessed the home controller index page", null, null, null);
+				this.loggingService.LogInformation("You have accessed the home controller index page");
 			}
 			catch (Exception e)
 			{
@@ -119,9 +125,9 @@ namespace LoggingExample.Controllers
 				// write the exception to the trace log
 				Trace.TraceError($"Unexpected error: {e}");
 			}
-			
 
-			return this.View("Index");
+
+			return this.View();
 		}
 	}
 }

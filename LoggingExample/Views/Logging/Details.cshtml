@@ -1,4 +1,5 @@
-﻿@model LoggingExample.Models.LogModels.LogViewModel
+﻿@using LoggingExample.Models.DbModels
+@model LoggingExample.Models.LogModels.LogViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -34,12 +35,15 @@
         <dd>
             @Html.TextAreaFor(model => model.Message, new { @class = "form-control", cols = "20", rows = 5, @readonly = "readonly" })
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.StackTrace)
-        </dt>
-        <dd>
-            @Html.TextAreaFor(model => model.StackTrace, new { @class = "form-control", cols = "20", rows = 5, @readonly = "readonly" })
-        </dd>
+        @if (Model.Type >= LogType.Error)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.StackTrace)
+            </dt>
+            <dd>
+                @Html.TextAreaFor(model => model.StackTrace, new { @class = "form-control", cols = "20", rows = 5, @readonly = "readonly" })
+            </dd>
+        }
         <dt>
             @Html.DisplayNameFor(model => model.RequestPath)
         </dt>

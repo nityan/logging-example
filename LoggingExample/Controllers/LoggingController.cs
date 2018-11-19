@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using LoggingExample.Models.LogModels;
 using LoggingExample.Services;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace LoggingExample.Controllers
 {
@@ -60,13 +62,15 @@ namespace LoggingExample.Controllers
 
 				model = new LogViewModel(log);
 			}
-			catch (KeyNotFoundException)
+			catch (KeyNotFoundException e)
 			{
+				this.loggingService.LogError($"Key not found exception: {e}. Request Path: {this.Request.GetUri()?.AbsolutePath}");
 				return RedirectToAction("Index");
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+				this.loggingService.LogError($"Exception: {e}. Request Path: {this.Request.GetUri()?.AbsolutePath}");
+				return RedirectToAction("Index");
 			}
 
 			return this.View("Details", model);

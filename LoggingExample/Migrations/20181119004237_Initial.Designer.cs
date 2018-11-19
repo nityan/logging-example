@@ -12,7 +12,7 @@ using System;
 namespace LoggingExample.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181116152835_Initial")]
+    [Migration("20181119004237_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

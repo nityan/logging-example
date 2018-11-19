@@ -4,25 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using LoggingExample.Models.DbModels;
+using Microsoft.Extensions.Logging;
 
 namespace LoggingExample.Services
 {
 	/// <summary>
 	/// Represents a logging service.
 	/// </summary>
-	public interface ILoggingService
+	public interface ILoggingService : ILogger
 	{
-		/// <summary>
-		/// Creates a log entry.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="message">The message.</param>
-		/// <param name="stackTrace">The stack trace.</param>
-		/// <param name="requestPath">The request path.</param>
-		/// <param name="activityId">The activity identifier.</param>
-		/// <returns>Returns the created log entry.</returns>
-		Task<Log> CreateAsync(LogType type, string message, string stackTrace, string requestPath, string activityId);
-
 		/// <summary>
 		/// Retrieves a log for a given id.
 		/// </summary>

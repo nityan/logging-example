@@ -9,6 +9,7 @@ using LoggingExample.Services;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace LoggingExample.Controllers
 {
@@ -36,8 +37,7 @@ namespace LoggingExample.Controllers
 		/// Displays the error view.
 		/// </summary>
 		/// <returns>Returns an action result.</returns>
-		[ActionName("Index")]
-		public async Task<IActionResult> IndexAsync()
+		public IActionResult Index()
 		{
 			// retrieve the feature of the exception handler
 			var feature = this.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
@@ -48,7 +48,7 @@ namespace LoggingExample.Controllers
 			// if the exception is not null, write the error to the log
 			if (exception != null)
 			{
-				await this.loggingService.CreateAsync(LogType.Error, exception.Message, exception.StackTrace, this.HttpContext.Request.GetUri().AbsoluteUri, Activity.Current?.Id ?? this.HttpContext.TraceIdentifier);
+				this.loggingService.LogError(exception, exception.Message);
 			}
 
 			// create our ErrorViewModel
@@ -65,8 +65,7 @@ namespace LoggingExample.Controllers
 		/// </summary>
 		/// <param name="statusCode">The status code.</param>
 		/// <returns>Returns an action result.</returns>
-		[ActionName("StatusError")]
-		public async Task<IActionResult> StatusErrorAsync(int? statusCode = null)
+		public IActionResult StatusError(int? statusCode = null)
 		{
 			//var feature = this.HttpContext.Features.Get<IStatusCodePagesFeature>();
 
@@ -74,14 +73,12 @@ namespace LoggingExample.Controllers
 			// "Activity" relates to System.Diagnostics
 			// The HTTP context trace identifier is the special ID given to the HTTP request/response pipeline
 			var requestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier;
-			
-			// write to the log
-			await this.loggingService.CreateAsync(LogType.Error, $"Status code Error: {statusCode}", null, this.Request?.GetUri()?.ToString(), requestId);
 
 			switch (statusCode)
 			{
 				case 400:
-					await this.loggingService.CreateAsync(LogType.Error, "Bad Request", null, this.Request?.GetUri()?.ToString(), requestId);
+					// write the 400 error to the log
+					this.loggingService.LogError($"Bad request: {statusCode}");
 					break;
 				case 404:
 					// we don't care about 404's so just redirect the user
@@ -89,7 +86,7 @@ namespace LoggingExample.Controllers
 					return View("Error", model404);
 				case 500:
 					// write the 500 error to the log
-					await this.loggingService.CreateAsync(LogType.Error, "Internal server error", null, this.Request?.GetUri()?.ToString(), requestId);
+					this.loggingService.LogError($"Internal server error: {statusCode}");
 					break;
 				case null:
 					break;
